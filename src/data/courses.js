@@ -1,24 +1,22 @@
-const courses = [
+[
   {
-    id: 101,
-    name: "HTML & CSS Fundamentals",
-    description: "Building and designing web pages from scratch, including mobile responsiveness."
+    "id": 101,
+    "name": "HTML & CSS Fundamentals",
+    "description": "Building and designing web pages from scratch, including mobile responsiveness."
   },
   {
-    id: 102,
-    name: "JavaScript Programming",
-    description: "Understanding logic, variables, functions, and DOM manipulation in the browser."
+    "id": 102,
+    "name": "JavaScript Programming",
+    "description": "Understanding logic, variables, functions, and DOM manipulation in the browser."
   },
   {
-    id: 103,
-    name: "Introduction to Node.js & Backend",
-    description: "Building web servers, understanding the HTTP protocol, and working with file systems."
+    "id": 103,
+    "name": "Introduction to Node.js & Backend",
+    "description": "Building web servers, understanding the HTTP protocol, and working with file systems."
   },
   {
-    id: 104,
-    name: "Project Management with Git & GitHub",
-    description: "Tracking code versions and collaborating with other developers worldwide."
+    "id": 104,
+    "name": "Project Management with Git & GitHub",
+    "description": "Tracking code versions and collaborating with other developers worldwide."
   }
-];
-
-export default courses;
+]
