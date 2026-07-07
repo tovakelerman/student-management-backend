@@ -3,43 +3,31 @@
     "id": 1,
     "name": "Noa Cohen",
     "email": "noa@gmail.com",
-"enrolledCourseId": 102  ,
-  "grade": 9
-  },
+"enrolledCourseId": 102  },
   {
     "id": 2,
     "name": "Ester shimhon",
     "email": "Ester@gmail.com",
-"enrolledCourseId": 104,
-  "grade": 10
-  },
+"enrolledCourseId": 104  },
   {
     "id": 3,
     "name": "Lea Avraham",
     "email": "Lea@gmail.com",
-"enrolledCourseId": 103 ,
-    "grade": 7
-  },
+"enrolledCourseId": 103  },
   {
     "id": 4,
     "name": "Israel Israeli",
     "email": "israel@gmail.com",
-"enrolledCourseId": 101 ,
-  "grade": 9
-  },
+"enrolledCourseId": 101  },
   {
     "id": 5,
     "name": "Sarah Levi",
     "email": "sarah@gmail.com",
-"enrolledCourseId": 102 ,
-  "grade": 8
-  },
+"enrolledCourseId": 102  },
   {
     "id": 6,
     "name": "David Cohen",
     "email": "david@gmail.com",
-"enrolledCourseId": 104,
-  "grade": 6
-  }
+"enrolledCourseId": 104  }
 
 ]

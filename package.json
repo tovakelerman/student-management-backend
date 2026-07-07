@@ -1,16 +1,25 @@
 {
-  "name": "nodejs",
+  "name": "student-management-backend",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tovakelerman/student-management-backend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "bugs": {
+    "url": "https://github.com/tovakelerman/student-management-backend/issues"
+  },
+  "homepage": "https://github.com/tovakelerman/student-management-backend#readme",
+  "type": "module",
   "dependencies": {
-    "chalk": "^5.4.1"
+    "chalk": "^5.4.1",
+    "express": "^5.1.0"
   }
 }
