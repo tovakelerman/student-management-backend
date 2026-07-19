@@ -1,0 +1,11 @@
+[
+  { "id": 1, "studentId": 1, "courseId": 102 },
+  { "id": 2, "studentId": 2, "courseId": 104 },
+  { "id": 3, "studentId": 3, "courseId": 103 },
+  { "id": 4, "studentId": 4, "courseId": 101 },
+  { "id": 5, "studentId": 5, "courseId": 102 },
+  { "id": 6, "studentId": 6, "courseId": 104 },
+  { "id": 7, "studentId": 1, "courseId": 101 },
+  { "id": 8, "studentId": 1, "courseId": 104 },
+  { "id": 9, "studentId": 3, "courseId": 101 }
+]

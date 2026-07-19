@@ -2,32 +2,31 @@
   {
     "id": 1,
     "name": "Noa Cohen",
-    "email": "noa@gmail.com",
-"enrolledCourseId": 102  },
+    "email": "noa@gmail.com"
+  },
   {
     "id": 2,
     "name": "Ester shimhon",
-    "email": "Ester@gmail.com",
-"enrolledCourseId": 104  },
+    "email": "Ester@gmail.com"
+  },
   {
     "id": 3,
     "name": "Lea Avraham",
-    "email": "Lea@gmail.com",
-"enrolledCourseId": 103  },
+    "email": "Lea@gmail.com"
+  },
   {
     "id": 4,
     "name": "Israel Israeli",
-    "email": "israel@gmail.com",
-"enrolledCourseId": 101  },
+    "email": "israel@gmail.com"
+  },
   {
     "id": 5,
     "name": "Sarah Levi",
-    "email": "sarah@gmail.com",
-"enrolledCourseId": 102  },
+    "email": "sarah@gmail.com"
+  },
   {
     "id": 6,
     "name": "David Cohen",
-    "email": "david@gmail.com",
-"enrolledCourseId": 104  }
-
+    "email": "david@gmail.com"
+  }
 ]
