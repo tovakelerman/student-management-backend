@@ -59,7 +59,7 @@ export const fetchStudentsByCourseId = (courseId) => {
         error: false,
         data: {
             course: { id: course.id, name: course.name },
-            registeredStudents: fullStudentsList
+            enrollmentedStudents: fullStudentsList
         }
     };
 };
@@ -75,7 +75,7 @@ export const addEnrollment = (studentId, courseId) => {
 
     // מניעת כפל רישום
     const exists = enrollments.some(e => e.studentId === studentId && e.courseId === courseId);
-    if (exists) return { error: true, status: 400, message: "Student is already registered to this course" };
+    if (exists) return { error: true, status: 400, message: "Student is already enrollment to this course" };
 
     const maxId = enrollments.length > 0 ? Math.max(...enrollments.map(e => e.id)) : 0;
 

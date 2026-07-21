@@ -2,16 +2,19 @@ import express from 'express';
 import chalk from 'chalk';
 
 import studentsRoutes from './routes/studentsRoutes.js';
-import coursesRoutes from './routes/coursesRoutes.js';
+import coursesRoutes from './routes/courseRoutes.js';
 import enrollmentsRoutes from './routes/enrollmentsRoutes.js'; 
+
+import { verifyAuthKey } from '../src/middlewares/verifyMiddleware.js';
+
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/students', studentsRoutes); 
-app.use('/courses', coursesRoutes);
-app.use('/enrollments', enrollmentsRoutes); 
+app.use('/students', verifyAuthKey,studentsRoutes); 
+app.use('/courses', verifyAuthKey,coursesRoutes);
+app.use('/enrollments', verifyAuthKey,enrollmentsRoutes); 
 
 // =========================================================
 // נתיב הבית הכללי (GET)
@@ -25,6 +28,8 @@ app.get('/', (req, res) => {
     version: "1.0.0"
   });
 });
+
+app.use(verifyAuthKey);
 
 // =========================================================
 //  טיפול בנתיבים לא קיימים (404)
