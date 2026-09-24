@@ -1,11 +1,13 @@
 import chalk from 'chalk';
+const SECRET_KEY = process.env.SECRET_KEY;
+
 
 export const verifyAuthKey = (req, res, next) => {
   // 1. שולפים את ה-header שנקרא auth-key מתוך הבקשה של הלקוח
   const authKey = req.headers['auth-key'];
 
   // 2. בדיקה האם ה-header לא קיים או שערכו ריק/שגוי
-  if (!authKey || authKey !== 'my-secret-key') {
+  if (!authKey || authKey !== SECRET_KEY) {
     console.log(chalk.red(`❌ [שגיאת אימות] ניסיון גישה חסום נדחה. נתיב: ${req.originalUrl}`));
     return res.status(401).json({ message: "Unauthorized: Missing or invalid auth-key header" });
   }
