@@ -1,36 +1,50 @@
 import chalk from 'chalk';
 import * as enrollmentsService from '../services/enrollmentsService.js';
+import { requirePositiveInt } from '../utils/validate.js';
 
-// מילדוור לבדיקת תקינות השדות בגוף הבקשה
+// ============================================================
+//  Enrollment Middleware — אימות קלט לפני ה-Controller
+// ============================================================
+// שני המילדוורים בשרשרת .then() / .catch(next) →
+// המטפל הגלובלי → { error, message }.
+
+// בודקת את גוף הבקשה: studentId ו-courseId חייבים להיות
+// מספרים שלמים חיוביים. המזהה מנורמל ל-number, כך שה-Controller
+// לא צריך כרגע parseInt נוסף.
 export const validateEnrollmentIdBody = (req, res, next) => {
-    const { studentId, courseId } = req.body;
-
-    if (!studentId || !courseId) {
-        console.log(chalk.yellow(`⚠️ [missing input] Attempted enrollmention without studentId or courseId`));
-        return res.status(400).json({ message: "Student ID and Course ID are required" });
-    }
-
-    next();
+  Promise.resolve()
+    .then(() => {
+      const studentId = requirePositiveInt(req.body?.studentId, 'studentId');
+      const courseId = requirePositiveInt(req.body?.courseId, 'courseId');
+      req.body = { studentId, courseId };
+    })
+    .then(() => next())
+    .catch((err) => {
+      console.log(chalk.yellow(`⚠️ [Invalid input] Enrollment at ${req.originalUrl}: ${err.message}`));
+      next(err);
+    });
 };
 
-// מילדוור לבדיקת קיום הרישום לפי ID
+// בודקת שה-ID בנתיב הוא מספר שלם חיובי ושהרישום קיים.
 export const validateEnrollmentsExists = (req, res, next) => {
-    const enrollmentId = parseInt(req.params.id);
+  let enrollmentId;
 
-    if (isNaN(enrollmentId)) {
-        console.log(chalk.red(`❌ [Invalid ID] Received a non-numeric enrollmention ID: ${req.originalUrl}`));
-        return res.status(400).json({ message: "Invalid enrollmention ID format" });
-    }
-
-    const foundEnrollment = enrollmentsService.fetchEnrollmentById(enrollmentId);
-
-    if (!foundEnrollment) {
-        console.log(chalk.red(`📝 ❌ [Not Found] enrollmention with ID ${enrollmentId} does not exist in the system`));
-        return res.status(404).json({ message: `enrollmention ID ${enrollmentId} not found` });
-    }
-
-    console.log(chalk.green(`📝 ✅ [enrollmention Found] ID ${foundEnrollment.id} (Student: ${foundEnrollment.studentId}, Course: ${foundEnrollment.courseId})`));
-
-    req.enrollment = foundEnrollment;
-    next();
+  Promise.resolve()
+    .then(() => {
+      enrollmentId = requirePositiveInt(req.params.id, 'Enrollment ID');
+    })
+    .then(() => enrollmentsService.fetchEnrollmentById(enrollmentId))
+    .then((enrollment) => {
+      req.enrollment = enrollment;
+      console.log(chalk.green(`📝 ✅ [Enrollment Found] ID ${enrollment.id} (Student: ${enrollment.studentId}, Course: ${enrollment.courseId})`));
+      next();
+    })
+    .catch((err) => {
+      if (err.status === 400) {
+        console.log(chalk.red(`❌ [Invalid ID] ${req.originalUrl}`));
+      } else if (err.status === 404) {
+        console.log(chalk.red(`📝 ❌ [Not Found] Enrollment with ID ${enrollmentId} does not exist in the system`));
+      }
+      next(err);
+    });
 };

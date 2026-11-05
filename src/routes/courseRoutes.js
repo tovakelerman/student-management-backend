@@ -6,9 +6,7 @@ import {
   updateCourse, 
   deleteCourse
 } from '../controllers/courseController.js';
-
-
-import { validateCourseExists,validateCourseBody } from '../middlewares/courseMiddleware.js';
+import { validateCourseExists, validateCourseBody } from '../middlewares/courseMiddleware.js';
 
 const router = express.Router();
 

@@ -1,0 +1,48 @@
+======================================================================
+My Project Documentation & AI Prompts Log
+Course: Node.js Backend - Year A
+Project: HTTP Server with Routing and Clean Architecture
+======================================================================
+
+1. Fixing Code Structure & File Language
+----------------------------------------------------------------------
+What happened:
+I had some issues running the files at first because of Hebrew characters in the names, which caused problems in the terminal. I separated the project into two files to keep a clean structure: 'src/data/courses.js' for the data, and 'src/index.js' for the main server logic. 
+
+Also, the terminal flipped the Hebrew text backwards, so I converted the course data array into English.
+
+Prompts I used:
+- "The file name isn't compatible with the language. I fixed it, and this works: 'node src/data/courses.js'. But the application is not running properly. Do I need to run 'node src/index.js' instead?"
+- "The server is running but the Hebrew characters are rendering backwards/mirrored in the VS Code integrated terminal due to Right-to-Left (RTL) limitations. Can you translate the core data structure array in 'courses.js' into clean English?"
+
+----------------------------------------------------------------------
+2. Handling Port Errors (EADDRINUSE)
+----------------------------------------------------------------------
+What happened:
+While testing the server, I got a runtime error: "EADDRINUSE: address already in use :::3000". I learned that this happens when a previous instance of the server is still running in the background and holding the port. I used terminal commands (like Ctrl+C and PowerShell) to kill the old process and free up port 3000.
+
+Prompts I used:
+- "Error: listen EADDRINUSE: address already in use :::3000. How do I fix this terminal error?"
+
+----------------------------------------------------------------------
+3. Adding Server Routing & Fixing Browser View
+----------------------------------------------------------------------
+What happened:
+When I opened the server in Chrome, the HTML '<pre>' tags were displaying as raw text instead of styling the page. I fixed this by changing the response header 'Content-Type' from 'application/json' to 'text/html' so Chrome would render the layout correctly.
+
+After that, I upgraded the server by adding dynamic routing using 'req.url'. Now the server can handle different paths:
+- [/] -> Shows a clean welcome page.
+- [/courses] -> Shows the structured list of courses in a clean dark-mode style.
+- [Any other path] -> Shows a custom 404 Page Not Found error.
+
+I also added a '.gitignore' file in the root folder to make sure the heavy 'node_modules' folder doesn't get uploaded to GitHub.
+
+Prompts I used:
+- "Why does Google Chrome render the literal '<pre>' tags as raw text string when I visit http://localhost:3000?"
+- "Can you provide the complete code refactor to support native routing based on the request URL? Also, where should the .gitignore and prompts.txt files live in the repository structure?"
+
+======================================================================
+End of Log - All features are fully working and uploaded to GitHub!
+======================================================================
+
+

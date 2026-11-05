@@ -1,63 +1,36 @@
-require('dotenv').config();
-import express from 'express';
+import 'dotenv/config'; // חייב להיות ראשון: טוען .env לפני שמודולים אחרים קוראים ממנו
 import chalk from 'chalk';
 
-import studentsRoutes from './routes/studentsRoutes.js';
-import coursesRoutes from './routes/courseRoutes.js';
-import enrollmentsRoutes from './routes/enrollmentsRoutes.js'; 
-
-import { verifyAuthKey } from '../src/middlewares/verifyMiddleware.js';
-
-const app = express();
-app.use(express.json());
+import app from './app.js';
+import { createStore } from './dataStore.js';
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/students', verifyAuthKey,studentsRoutes); 
-app.use('/courses', verifyAuthKey,coursesRoutes);
-app.use('/enrollments', verifyAuthKey,enrollmentsRoutes); 
+// =========================================================
+//  בדיקת מוכנות לפני ההאזנה
+// =========================================================
+// עדיף להיכשל פעם אחת בעלייה, בשקט, על פני שרת שנראה "רץ"
+// וכל בקשה שנייה שלו מחזירה 500.
+//
+// סגנון: שרשרת `.then()/.catch()` — גם כאן. הבדיקה עוברת על שלושת
+// הקבצים בזה אחר זה (ברצף, כמו היה קודם) ומחזירה Promise שמסתיים
+// רק כשכולם נקראו בהצלחה, או נדחה עם השגיאה הראשונה.
+const checkStartup = () => {
+  if (!process.env.SECRET_KEY) {
+    // Promise.reject ולא throw: הקורא תמיד מקבל Promise, וכל השגיאות
+    // מגיעות לאותו `.catch` ב-startup.
+    return Promise.reject(new Error('SECRET_KEY is missing in .env'));
+  }
 
-// =========================================================
-// נתיב הבית הכללי (GET)
-// =========================================================
-app.get('/', (req, res) => {
-  console.log(chalk.blue('\n🏠 Notice: User requested the root path (/)'));
-  res.json({ 
-    status: "success",
-    message: "Server is up and running successfully",
-    description: "This API server provides detailed management data for school courses, students, and enrollments.",
-    version: "1.0.0"
-  });
-});
+  // readAll בלבד — קובץ חסר ייווצר כ-[] (אותה התנהגות של בקשה רגילה),
+  // קובץ פגום או קובץ שלא ניתן לקרוא יזרקו שגיאה → עצירת עלייה.
+  return ['courses.json', 'students.json', 'enrollments.json'].reduce(
+    (chain, fileName) => chain.then(() => createStore(fileName).readAll()),
+    Promise.resolve()
+  );
+};
 
-app.use(verifyAuthKey);
-
-// =========================================================
-//  טיפול בנתיבים לא קיימים (404)
-// =========================================================
-app.use((req, res) => {
-  console.log(chalk.yellow(`\n⚠️ Warning: Someone tried to visit a broken path: ${req.url}`));
-  res.status(404).json({
-    error: "Not Found",
-    message: `The requested path '${req.url}' does not exist on this server.`
-  });
-});
-
-// =========================================================
-// רשת ביטחון גלובלית לשגיאות שרת פנימיות (500)
-// =========================================================
-app.use((err, req, res, next) => {
-  console.error(chalk.red(`💥 Internal Server Error: ${err.message}`));
-  res.status(500).json({
-    error: "Internal Server Error",
-    message: "Something went wrong on the server."
-  });
-});
-
-// =========================================================
-//  הפעלת השרת
-// =========================================================
-app.listen(PORT, () => {
+const startListening = () => app.listen(PORT, () => {
   console.log(chalk.bold.green(`\n=== Express School API Server is Running on http://localhost:${PORT} ===`));
   console.log(chalk.gray('Available Endpoints:'));
   console.log(chalk.yellow(`- Base Info: http://localhost:${PORT}/`));
@@ -65,3 +38,11 @@ app.listen(PORT, () => {
   console.log(chalk.yellow(`- Students List: http://localhost:${PORT}/students`));
   console.log(chalk.yellow(`- Enrollments List: http://localhost:${PORT}/enrollments\n`));
 });
+
+checkStartup()
+  .then(() => startListening())
+  .catch((err) => {
+    console.error(chalk.bold.red(`\n❌ Startup check failed: ${err.message}`));
+    console.error(chalk.gray('   Fix the problem above and start the server again.\n'));
+    process.exit(1);
+  });

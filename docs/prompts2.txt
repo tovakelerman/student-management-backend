@@ -1,0 +1,33 @@
+======================================================================
+DOCUMENTATION OF AI ASSISTED DEVELOPMENT - EXPRESS SCHOOL API
+======================================================================
+
+STEP 1: INSTALLING EXPRESS AND SETTING UP INITIAL ENVIRONMENT
+----------------------------------------------------------------------
+Prompt: "How do I install the Express library in my existing Node.js project using npm? Explain if there are any network blockers like NetFree I should be aware of."
+AI Answer Summary: Provided the 'npm install express' command and reassured that NetFree natively supports the official npm registry without additional proxy configurations.
+
+STEP 2: REFACTORING FROM CODES TO SEPARATE FILES (MODULES)
+----------------------------------------------------------------------
+Prompt: "In Node.js, what is a module? Explain how to split my existing array data into a separate file under 'src/data/courses.js' and export it using ES Modules (export default)."
+AI Answer Summary: Explained that every file is an isolated module. Showed how to write 'export default courses' in the source file and 'import courses from ...' in the main script.
+
+STEP 3: CREATING THE BASE EXPRESS SERVER AND ROOT ROUTE
+----------------------------------------------------------------------
+Prompt: "Show me how to initialize an Express app instance and define a root GET route '/' that returns a simple JSON object detailing that the server is working, instead of an HTML string."
+AI Answer Summary: Demonstrated 'const app = express()' and 'app.get('/', (req, res) => res.json({...}))', explaining that res.json automatically configures the headers.
+
+STEP 4: ROUTING MULTIPLE JSON DATA ENDPOINTS
+----------------------------------------------------------------------
+Prompt: "I need my server to support multiple routes. How do I setup additional endpoints for '/courses' and '/students' so each returns their respective loaded data array as clean JSON data?"
+AI Answer Summary: Provided code block extensions showing parallel 'app.get' handlers for both endpoints, fulfilling the task requirements for separate entity responses.
+
+STEP 5: CODE REVIEW AND QUALITY ASSURANCE IN EXPRESS
+----------------------------------------------------------------------
+Prompt: "Review the structure of the Express routes we created. Are there any structure issues, typical beginner bugs, or ways to enhance the readability of the response objects?"
+AI Answer Summary: Confirmed code is valid. Suggested wrapping individual console outputs with color tags (like chalk) to retain full system monitoring during manual terminal debugging.
+
+STEP 6: CONTROLLING THE LIFECYCLE AND SERVER PORT LISTENING
+----------------------------------------------------------------------
+Prompt: "How do I bind the Express application instance to open port 3000? Explain what the app.listen callback function is used for."
+AI Answer Summary: Showed the implementation of app.listen(PORT, callback), explaining that the callback fires only after the port is successfully claimed by the active runtime.

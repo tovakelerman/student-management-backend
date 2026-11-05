@@ -1,66 +1,71 @@
 import chalk from 'chalk';
 import * as studentsService from '../services/studentsService.js';
 
+// ============================================================
+//  Students Controller — .then() / .catch() לכל פונקציה
+// ============================================================
+// השירות מחזיר Promise (קריאה/כתיבה מהדיסק). כאן מטפלים בתוצאה
+// ובשגיאה בשתי דרכים:
+//
+//   .then(data => res.json(data))          ← הצלחה
+//   .catch(next)                            ← שגיאה
+//
+// ה-.catch(next) מעביר את השגיאה אל המטפל הגלובלי ב-app.js, ושם:
+//   - שגיאה "עסקית" (404 / 400 / 409) מוחזרת עם הקוד שלה;
+//   - כל שגיאה אחרת (למשל קובץ נתונים שלא אפשר לקרוא) מוחזרת 500.
+// כך שהשרת אף פעם לא קורס בגלל בקשה אחת, והלקוח מקבל תשובה ברורה.
+
 // קבלת כל הסטודנטים
 export const getAllStudents = (req, res, next) => {
-    try {
-        console.log(chalk.blue('\n👥 Fetching all students data...'));
-        const students = studentsService.fetchAllStudents();
-        res.json(students);
-    } catch (err) {
-        next(err);
-    }
+  console.log(chalk.blue('\n👥 Fetching all students data...'));
+
+  studentsService.fetchAllStudents()
+    .then((students) => res.json(students))
+    .catch(next);
 };
 
-// קבלת סטודנט לפי מזהה
+// קבלת סטודנט לפי מזהה (המילדוור כבר שם אותו ב-req.student)
 export const getStudentById = (req, res, next) => {
-    try {
-        console.log(chalk.green(`🔍 Student ID ${req.student.id} found`));
-        res.json(req.student);
-    } catch (err) {
-        next(err);
-    }
+  console.log(chalk.green(`🔍 Student ID ${req.student.id} found`));
+
+  Promise.resolve(req.student) // הלקוח מבקש "עוד לקרוא" משהו — מגיבים מיד
+    .then((student) => res.json(student))
+    .catch(next);
 };
 
-// יצירת סטודנט חדש 
+// יצירת סטודנט חדש
 export const createStudent = (req, res, next) => {
-    try {
-// 1. קודם מחלצים את השדות מתוך גוף הבקשה
-        const { name, email } = req.body; 
+  const { name, email } = req.body;
 
-        // 2. עכשיו מעבירים אותם לסרוויס
-        const newStudent = studentsService.addStudent(name, email);
-
-        console.log(chalk.green(`🎓 Student enrollmented: ${newStudent.name} (ID: ${newStudent.id})`));
-        res.status(201).json(newStudent);
-    } catch (err) {
-        next(err);
-    }
+  studentsService.addStudent(name, email)
+    .then((newStudent) => {
+      console.log(chalk.green(`🎓 Student created: ${newStudent.name} (ID: ${newStudent.id})`));
+      res.status(201).json(newStudent);
+    })
+    .catch(next);
 };
 
-// עדכון סטודנט קיים 
+// עדכון סטודנט קיים
 export const updateStudent = (req, res, next) => {
-    try {
-          const { name, email } = req.body; 
+  const { name, email } = req.body;
 
-        // 2. עכשיו מעבירים אותם לסרוויס
-        const updatedStudent = studentsService.editStudent(req.student.id, name, email);
-
-        console.log(chalk.cyan(`📝 Student ID ${req.student.id} Updated Successfully`));
-        res.json(updatedStudent);
-    } catch (err) {
-        next(err);
-    }
+  studentsService.editStudent(req.student.id, name, email)
+    .then((updatedStudent) => {
+      console.log(chalk.cyan(`📝 Student ID ${req.student.id} Updated Successfully`));
+      res.json(updatedStudent);
+    })
+    .catch(next);
 };
 
-// מחיקת סטודנט
+// מחיקת סטודנט (השירות מוחק גם את הרישומים שלו)
 export const deleteStudent = (req, res, next) => {
-    try {
-        studentsService.removeStudent(req.student.id);
-        
-        console.log(chalk.red(`🗑️ Student ID ${req.student.id} Removed from system`));
-        res.json({ message: "Student deleted successfully" });
-    } catch (err) {
-        next(err);
-    }
+  studentsService.removeStudent(req.student.id)
+    .then(({ removedEnrollments }) => {
+      console.log(chalk.red(`🗑️ Student ID ${req.student.id} Removed from system`));
+      if (removedEnrollments > 0) {
+        console.log(chalk.yellow(`   ↳ ${removedEnrollments} enrollment(s) removed along with the student`));
+      }
+      res.json({ message: "Student deleted successfully", removedEnrollments });
+    })
+    .catch(next);
 };
